@@ -28,6 +28,45 @@ int[] learnerResult = Answer.MoveZerosToEnd(numbers);
 
 Console.WriteLine(learnerResult);
 
+// Loop Version:
+
+// C# code​​​​​​‌‌‌‌​​‌​​​​​​‌​‌​​‌​​​​​‌ below
+using System;
+
+// Write your answer here, and then test your code.
+
+public class Answer {
+
+    // Change these Boolean values to control whether you see 
+    // the expected result and/or hints.
+   public  static Boolean ShowExpectedResult = false;
+   public  static Boolean ShowHints = false;
+
+    public static int[] MoveZerosToEnd(int[] numbers) {
+        var nonZeroPosition = 0;
+        for(var i = 0; i< numbers.Length -1; i++)
+        {
+            if(numbers[i] != 0)
+            {
+                numbers[nonZeroPosition] = numbers[i];
+                nonZeroPosition++;
+            }
+        }
+
+        while(nonZeroPosition < (numbers.Length - 1))
+        {
+            numbers[nonZeroPosition] = 0;
+            nonZeroPosition++;
+        }
+        
+        // Your code goes here.
+        return numbers;
+    }
+}
+
+
+// Recursion version:
+
 public class Answer {
 
     // Change these Boolean values to control whether you see 
