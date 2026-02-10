@@ -1,0 +1,60 @@
+/*
+
+Move Zeroes to the End
+You're given an array of integers.
+Your task: Move all the zeroes to the end of the array while maintaining the relative order of the non-zero elements.
+Parameters
+numbers: An array of integers
+Result
+int[]: The modified array
+Constraints
+• The numbers array always contains at least one number.
+• Each integer can be either positive or negative or non-zero.
+Example 1:
+Input: [2, 0, 5, 0, 20, 30, 56]
+Modified Array: [2, 5, 20, 30, 56, 0, 0]
+Example 2:
+Input: [0, -20, 30, -56, 0]
+Result: [-20, 30, -56, 0, 0]
+*/
+
+// C# code​​​​​​‌‌‌‌​​‌​​​​​​‌​‌​​‌​​​​​‌ below
+using System;
+
+// Write your answer here, and then test your code.
+
+public class Answer {
+
+    // Change these Boolean values to control whether you see 
+    // the expected result and/or hints.
+   public  static Boolean ShowExpectedResult = false;
+   public  static Boolean ShowHints = false;
+
+    public static int[] MoveZerosToEnd(int[] numbers) {
+        
+        for(var i = 0; i< numbers.Length -1; i++)
+        {
+            var value = numbers[i];
+            if(value == 0 && i + 1 < numbers.Length - 1)
+            {
+                numbers[i] = FindNextNonZero(numbers, i+1, out var place);
+                numbers[place] = 0;
+            }
+        }
+        // Your code goes here.
+        return numbers;
+    }
+
+    public static int FindNextNonZero(int[] numbers, int index, out int place)
+    {
+        if(index >= numbers.Length){
+            place = index;
+            return 0;
+        }
+        if(numbers[index] != 0){
+            place = index;
+            return numbers[index];
+        }
+        return FindNextNonZero(numbers, index+1, out place);
+    }
+}
