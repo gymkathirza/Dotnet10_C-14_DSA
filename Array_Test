@@ -21,7 +21,12 @@ Result: [-20, 30, -56, 0, 0]
 // C# code​​​​​​‌‌‌‌​​‌​​​​​​‌​‌​​‌​​​​​‌ below
 using System;
 
-// Write your answer here, and then test your code.
+// This is how your code will be called.
+// You can edit this code to try different testing cases.
+int[] numbers = { 0, -20, 30, -56, 0 };
+int[] learnerResult = Answer.MoveZerosToEnd(numbers);
+
+Console.WriteLine(learnerResult);
 
 public class Answer {
 
