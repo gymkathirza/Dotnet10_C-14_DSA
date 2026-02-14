@@ -1,6 +1,6 @@
 # To Run the Application in this folder
 
-- Open Terminal and ensure the current directory is DSA/standalone/Typescript (Typescript folder is the root of this small app)
+- Open Terminal and ensure the current directory is /standalone/Typescript (Typescript folder is the root of this small app)
 - Run `npm install`
 - Run `npm start`
 
