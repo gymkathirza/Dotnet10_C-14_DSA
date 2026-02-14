@@ -57,7 +57,7 @@ public class Random_algo
 		Console.WriteLine();
 		foreach(var kv in dict)
 		{
-			var per = (double)kv.Value/50 * 100;
+			var per = (int)((double)kv.Value/50 * 100);
 			Console.WriteLine($"key: {kv.Key}, value: {kv.Value}, per: {per}");
 		}
     }
