@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Weighted Random</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen py-10 px-4 font-sans text-slate-800">
+
+    <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        <div class="bg-indigo-600 p-6">
+            <h2 class="text-2xl font-bold text-white">Probability Manager</h2>
+            <p class="text-indigo-100 text-sm mt-1">Configure weights and simulate random outcomes.</p>
+        </div>
+        
+        <div class="p-6 space-y-6">
+            <div id="itemContainer" class="space-y-3">
+                </div>
+
+            <div class="flex gap-3">
+                <button onclick="addItem()" class="flex-1 py-2 px-4 bg-emerald-50 text-emerald-700 font-semibold rounded-lg border border-emerald-200 hover:bg-emerald-100 transition-colors">
+                    + Add Item
+                </button>
+                <button onclick="runSimulation()" class="flex-[2] py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-all active:scale-[0.98]">
+                    Run 1,000 Pulls
+                </button>
+            </div>
+
+            <div id="results" class="pt-6 border-t border-slate-100 hidden">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="w-2 h-6 bg-indigo-600 rounded-full"></span>
+                    Simulation Results
+                </h3>
+                <div id="resultsList" class="space-y-4">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="index.ts"></script>
+</body>
+</html>
