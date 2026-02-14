@@ -7,4 +7,11 @@ arr[3] = 15;
 Console.WriteLine($"Array elements: {string.Join(", ", arr)}");
 Console.WriteLine($"List elements: {string.Join(", ", list)}");
 
-Random_algo.GFG.Main(args);
+Console.WriteLine($"--- Random algo 1 (50%) & 0 (50%) ---");
+Random_algo.Run(Random_algo.RAND_ALGO_TYPE.Rand50);
+
+Console.WriteLine($"--- Random algo 1 (75%) & 0 (25%) ---");
+Random_algo.Run(Random_algo.RAND_ALGO_TYPE.Rand_1_75_Rand_0_25);
+
+Console.WriteLine($"--- Random algo 1 (25%) & 0 (75%) ---");
+Random_algo.Run(Random_algo.RAND_ALGO_TYPE.Rand_1_25_Rand_0_75);
