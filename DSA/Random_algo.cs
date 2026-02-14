@@ -1,10 +1,11 @@
 namespace DSA;
 
+// C# program to print 
+// 1) 1 with 50% probability and 0 with 50% probability 
+// 2) 1 with 75% probability and 0 with 25% probability 
+// 3) 1 with 25% probability and 0 with 75% probability 
 public class Random_algo
 {
-    // C# program to print 1 with 75% probability and 0 
-    // with 25% probability 
-
     // Instantiate random number generator
     static readonly Random rand = new();
 
