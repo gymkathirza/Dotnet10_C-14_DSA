@@ -1,14 +1,10 @@
 import { WeightedRandomManager } from './weighted-random';
 
-// Initialize the manager with default items
-const manager = new WeightedRandomManager([
-    { name: "Common", weight: 70 },
-    { name: "Rare", weight: 25 },
-    { name: "Legendary", weight: 5 }
-]);
+// Initialize the manager
+const manager = new WeightedRandomManager();
 
 /**
- * Updates the visual result bars in the UI
+ * Updates the visual result bars for the simulation
  */
 const updateUIResults = (results: Record<string, number>): void => {
     const resultsSection = document.getElementById('results');
@@ -16,11 +12,9 @@ const updateUIResults = (results: Record<string, number>): void => {
     
     if (!resultsSection || !resultsList) return;
 
-    // Reveal the results area
     resultsSection.classList.remove('hidden');
     resultsList.innerHTML = '';
     
-    // Calculate the total iterations for percentage math
     const totalIterations = Object.values(results).reduce((a, b) => a + b, 0);
 
     Object.entries(results).forEach(([name, count]) => {
@@ -41,64 +35,95 @@ const updateUIResults = (results: Record<string, number>): void => {
 };
 
 /**
- * Renders the input rows based on the current state of the manager
+ * Renders the input rows.
+ * Since we are using the Observer pattern, this is called automatically
+ * whenever manager.addItem() or manager.removeItem() is triggered.
  */
 const renderInputs = (): void => {
     const container = document.getElementById('itemContainer');
+    const totalDisplay = document.getElementById('totalDisplay');
     if (!container) return;
 
+    const items = manager.getItems();
     container.innerHTML = '';
-
-    console.log("Rendering items from:", manager);
-    console.log("Rendering items:", manager.getItems());
     
-    manager.getItems().forEach((item, index) => {
+    items.forEach((item, index) => {
         const row = document.createElement('div');
         row.className = "flex gap-2 items-center group animate-in fade-in duration-300";
         
         row.innerHTML = `
             <input type="text" value="${item.name}" data-index="${index}" data-field="name"
                    class="flex-[2] p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
-            <input type="number" value="${item.weight}" data-index="${index}" data-field="weight"
-                   class="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-            <button class="btn-delete p-2 text-slate-400 hover:text-red-500 transition-colors">
+            <div class="flex-1 relative">
+                <input type="number" value="${item.weight.toFixed(1)}" data-index="${index}" data-field="weight"
+                       class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                <span class="absolute right-8 top-2 text-slate-400 text-sm">%</span>
+            </div>
+            <button data-action="delete" data-index="${index}" class="p-2 text-slate-400 hover:text-red-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
             </button>
         `;
 
-        // Event: Update Data
-        row.querySelectorAll('input').forEach(input => {
+        // Attach internal listeners for data updates
+        const inputs = row.querySelectorAll('input');
+        inputs.forEach(input => {
             input.addEventListener('change', (e) => {
                 const target = e.target as HTMLInputElement;
                 const field = target.dataset.field as any;
                 manager.updateItem(index, field, target.value);
+                
+                // If the weight was changed, we might want to show the new total immediately
+                if (field === 'weight') updateWeightTotalDisplay();
             });
-        });
-
-        // Event: Delete Item
-        row.querySelector('.btn-delete')?.addEventListener('click', () => {
-            manager.removeItem(index);
-            renderInputs();
         });
 
         container.appendChild(row);
     });
+
+    updateWeightTotalDisplay();
 };
 
-// --- Initialization & Global Listeners ---
+/**
+ * Helper to update the 100% total indicator
+ */
+const updateWeightTotalDisplay = () => {
+    const totalDisplay = document.getElementById('totalDisplay');
+    if (!totalDisplay) return;
 
-document.getElementById('btnAdd')?.addEventListener('click', () => {
-    manager.addItem();
-    renderInputs();
-});
+    const total = manager.getItems().reduce((sum, i) => sum + i.weight, 0);
+    totalDisplay.innerText = `Total: ${total.toFixed(1)}%`;
+    
+    if (Math.abs(total - 100) < 0.1) {
+        totalDisplay.className = "text-sm font-semibold text-emerald-600";
+    } else {
+        totalDisplay.className = "text-sm font-semibold text-amber-600";
+    }
+};
 
-document.getElementById('btnRun')?.addEventListener('click', () => {
-    const iterations = 1000;
-    console.log("simulation on:", manager);
-    const results = manager.runSimulation(iterations);
-    updateUIResults(results);
+// --- Observer Subscription ---
+manager.subscribe(renderInputs);
+
+// --- Global Event Delegation ---
+document.addEventListener('click', (e) => {
+    const target = (e.target as HTMLElement).closest('[data-action]');
+    if (!target) return;
+
+    const action = (target as HTMLElement).dataset.action;
+    
+    switch (action) {
+        case 'add':
+            manager.addItem();
+            break;
+        case 'run':
+            updateUIResults(manager.runSimulation(1000));
+            break;
+        case 'delete':
+            const index = parseInt((target as HTMLElement).dataset.index || "0");
+            manager.removeItem(index);
+            break;
+    }
 });
 
 // Initial Render
