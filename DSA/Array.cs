@@ -39,52 +39,21 @@ public class Solution {
 	
 	public static void Main(string[] args)
 	{
-		var arr = new int[] {0,1,2,3,4,5,6,7, 8};
+		int[] arr = [0,1,2,8,4,5,6,7,4];
 		Array.ForEach<int>(SortByBits(arr), Console.WriteLine);
 	}
     public static int[] SortByBits(int[] arr) {
         
-        var sort = new SortedDictionary<int, int[]>();
-        //Extract and Transform
-        foreach(var item in arr)
-        {
-            var count = BinaryOneCount(item);
-			if(sort.ContainsKey(count))
-			{
-				var existing = sort[count];
-				sort[count] = [..existing, item];
-			}
-			else
-			{
-				sort[count] = [item];
-			}
-        }
-		
-		var result = new int[0];
-		
-		foreach(var kv in sort)
-		{
-			Array.Sort<int>(kv.Value);
-			result = [..result, ..kv.Value];
-		}
-		
-        return result;
+        return arr.OrderBy(item => CountBits(item)).ThenBy(x => x).ToArray();
     }
 
-    private static int BinaryOneCount(int number)
+    private static int CountBits(int number)
     {
-		//Console.WriteLine(number);
         var count = 0;
-        var quo = 0;
-        do{
-            quo = number / 2;
-            var remainder = number % 2;
-			if(remainder == 1)
-			{
-				count++;
-			}
-			number = quo;
-        }while(quo != 0);
-    return count;
+        while(number > 0){
+            count += number & 1;
+            number >>= 1;
+        };
+        return count;
     }
 }
